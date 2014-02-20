@@ -43,6 +43,7 @@ namespace Grabacr07.KanColleViewer.Models
 				ScreenshotFilename = "KanColle-{0:d04}.png",
 				ScreenshotImageFormat = SupportedImageFormat.Png,
 				CanDisplayBuildingShipName = false,
+                EnableLogging = false,
 			};
 		}
 
@@ -316,6 +317,28 @@ namespace Grabacr07.KanColleViewer.Models
 
 		#endregion
 
+		#region Culture 変更通知プロパティ
+
+		private string _Culture;
+
+		/// <summary>
+		/// カルチャを取得または設定します。
+		/// </summary>
+		public string Culture
+		{
+			get { return this._Culture; }
+			set
+			{
+				if (this._Culture != value)
+				{
+					this._Culture = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 		#region ReSortieCondition 変更通知プロパティ
 
 		private ushort _ReSortieCondition = 40;
@@ -338,7 +361,26 @@ namespace Grabacr07.KanColleViewer.Models
 
 		#endregion
 
-		public void Save()
+        #region EnableLogging 変更通知プロパティ
+
+        private bool _EnableLogging;
+
+        public bool EnableLogging
+        {
+            get { return this._EnableLogging; }
+            set
+            {
+                if (this._EnableLogging != value)
+                {
+                    this._EnableLogging = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
+        public void Save()
 		{
 			try
 			{

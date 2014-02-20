@@ -150,6 +150,7 @@
     <Compile Include="Models\Helper.cs" />
     <Compile Include="Models\Internal\Windows7Notifier.cs" />
     <Compile Include="Models\Mode.cs" />
+    <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\StatusService.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SupportedImageFormat.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Models\Internal\Windows8Notifier.cs" />
     <Compile Include="Models\Volume.cs" />
     <Compile Include="ViewModels\Catalogs\SlotItemCatalogViewModel.cs" />
+    <Compile Include="ViewModels\Catalogs\SlotItemViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\SortableColumnViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\ShipCatalogSortWorker.cs" />
     <Compile Include="Models\WindowsNotification.cs" />
@@ -175,7 +177,10 @@
     <Compile Include="ViewModels\BindableTextViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\ShipTypeViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\ShipCatalogWindowViewModel.cs" />
+    <Compile Include="ViewModels\Contents\RankingsViewModel.cs" />
+    <Compile Include="ViewModels\Contents\RankingViewModel.cs" />
     <Compile Include="ViewModels\Dev\DebugTabViewModel.cs" />
+    <Compile Include="ViewModels\CultureViewModel.cs" />
     <Compile Include="ViewModels\MainContentViewModel.cs" />
     <Compile Include="Models\INavigator.cs" />
     <Compile Include="ViewModels\Contents\MaterialsViewModel.cs" />
@@ -196,6 +201,9 @@
     <Compile Include="Views\Behaviors\ScreenshotAction.cs" />
     <Compile Include="Views\Behaviors\SetStyleSheetBehavior.cs" />
     <Compile Include="Views\Behaviors\SetWindowLocationAction.cs" />
+    <Compile Include="Views\Contents\Rankings.xaml.cs">
+      <DependentUpon>Rankings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\WebBrowserHelper.cs" />
     <Compile Include="Views\Behaviors\ZoomAction.cs" />
     <Compile Include="Views\BrowserNavigator.xaml.cs">
@@ -262,10 +270,16 @@
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win32\INTERNET_CACHE_ENTRY_INFOA.cs" />
+    <Compile Include="Win32\WinInet.cs" />
     <Compile Include="Win32\DVTARGETDEVICE.cs" />
     <Compile Include="Win32\IServiceProvider.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\ShellHelpers.cs" />
+    <Page Include="SampleData\RankingsViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -370,6 +384,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Contents\Rankings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Dev\DebugTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -440,7 +458,7 @@
     <Compile Include="ViewModels\Contents\Fleets\FleetsViewModel.cs" />
     <Compile Include="ViewModels\Contents\Fleets\FleetViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\NotStartedViewModel.cs" />
+    <Compile Include="ViewModels\StartContentViewModel.cs" />
     <Compile Include="ViewModels\Contents\ShipViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="Views\Behaviors\CountdownBehavior.cs" />
@@ -559,15 +577,16 @@
     <PostBuildEvent>xcopy /Y "$(TargetDir)KanColleViewer.exe" "$(SolutionDir)KanColleViewer-Compiled"
 xcopy /Y "$(TargetDir)KanColleViewer.exe.config" "$(SolutionDir)KanColleViewer-Compiled"
 xcopy /Y "$(TargetDir)*.dll" "$(SolutionDir)KanColleViewer-Compiled\lib"
+xcopy /Y /E /I  "$(TargetDir)ja-JP" "$(SolutionDir)KanColleViewer-Compiled\lib\ja-JP"
+xcopy /Y /E /I "$(TargetDir)zh-CN" "$(SolutionDir)KanColleViewer-Compiled\lib\zh-CN"
 xcopy /Y "$(SolutionDir)resources\translations\*.txt" "$(SolutionDir)KanColleViewer-Compiled"
 xcopy /Y "$(SolutionDir)resources\translations\*.txt" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>del /Q "$(TargetDir)*.txt"
+rd /S /Q "$(SolutionDir)KanColleViewer-Compiled"
 md "$(SolutionDir)KanColleViewer-Compiled"
-md "$(SolutionDir)KanColleViewer-Compiled\lib"
-del /Q "$(SolutionDir)KanColleViewer-Compiled\*.*"
-del /Q "$(SolutionDir)KanColleViewer-Compiled\lib\*.*"</PreBuildEvent>
+md "$(SolutionDir)KanColleViewer-Compiled\lib"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -49,6 +49,9 @@ namespace Grabacr07.KanColleWrapper
 		/// 任務情報を取得します。
 		/// </summary>
 		public Quests Quests { get; private set; }
+		public Rankings Rankings { get; private set; }
+
+		public Logger Logger { get; private set; }
 
 		#region Admiral 変更通知プロパティ
 
@@ -212,6 +215,8 @@ namespace Grabacr07.KanColleWrapper
 			this.Dockyard = new Dockyard(proxy);
 			this.Repairyard = new Repairyard(this, proxy);
 			this.Quests = new Quests(proxy);
+			this.Rankings = new Rankings(proxy);
+			this.Logger = new Logger(proxy);
 		}
 
 

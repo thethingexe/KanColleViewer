@@ -15,6 +15,7 @@ namespace Grabacr07.KanColleWrapper.Models
 	public class SlotItemInfo : RawDataWrapper<kcsapi_master_slotitem>, IIdentifiable
 	{
 		private SlotItemIconType? iconType;
+		private int? categoryId;
 
 		public int Id
 		{
@@ -26,30 +27,40 @@ namespace Grabacr07.KanColleWrapper.Models
 			//get { return this.RawData.api_name; }
 			get
 			{
-				System.IO.StreamReader filereader = new System.IO.StreamReader("equipment.txt", System.Text.Encoding.UTF8, true);
-				string read_line = null;
-				string jap_name = null;
-				string eng_name = null;
-				while (true)
+				try
 				{
-					read_line = filereader.ReadLine();
-					if (String.IsNullOrEmpty(read_line)) { filereader.Close(); break; }
-					else
+					System.IO.StreamReader filereader = new System.IO.StreamReader("equipment.txt", System.Text.Encoding.UTF8, true);
+					string read_line = null;
+					string jap_name = null;
+					string eng_name = null;
+					while (true)
 					{
-						char[] delimiter = { ';', ',' };
-						jap_name = read_line.Split(delimiter)[0];
-						eng_name = read_line.Split(delimiter)[1];
-						if (String.Equals(RawData.api_name, jap_name))
-						{ filereader.Close(); return eng_name; }
+						read_line = filereader.ReadLine();
+						if (String.IsNullOrEmpty(read_line)) { filereader.Close(); break; }
+						else
+						{
+							char[] delimiter = { ';', ',' };
+							jap_name = read_line.Split(delimiter)[0];
+							eng_name = read_line.Split(delimiter)[1];
+							if (String.Equals(RawData.api_name, jap_name))
+							{ filereader.Close(); return eng_name; }
+						}
 					}
 				}
+				catch { }
+
 				return this.RawData.api_name;
 			}
 		}
 
 		public SlotItemIconType IconType
 		{
-			get { return this.iconType ?? (this.iconType = this.RawData.api_type.Length == 4 ? (SlotItemIconType)this.RawData.api_type[3] : SlotItemIconType.Unknown).Value; }
+			get { return this.iconType ?? (SlotItemIconType)(this.iconType = (SlotItemIconType)(this.RawData.api_type.Get(3) ?? 0)); }
+		}
+
+		public int CategoryId
+		{
+			get { return this.categoryId ?? (int)(this.categoryId = this.RawData.api_type.Get(2) ?? int.MaxValue); }
 		}
 
 		/// <summary>
